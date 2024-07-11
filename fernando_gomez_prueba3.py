@@ -104,6 +104,7 @@ while var_menu:
                 with open("filtro_por_nombre.txt","w") as archivo_a_guardar:
                     archivo_a_guardar.write(res[1])
                 print("Archivo creado exitosamente!!")
+                print(f"El resultado de la busqueda es {res[1]}")
             else:
                 print("No se han encontrado juegos con ese nombre: ")
 
