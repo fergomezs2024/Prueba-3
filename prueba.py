@@ -17,9 +17,8 @@ def filtrar_archivo(filtro):
                 cadena_guardar += juego[0]+ "------>"+juego[-2] +"\n" 
 
         if len(cadena_guardar) != 0:
-            with open("filtro_por_nombre.txt","w") as archivo_a_guardar:
-                archivo_a_guardar.write(cadena_guardar)
-            return True
+  
+            return [True,cadena_guardar]
         else:
             
             return False
@@ -36,10 +35,13 @@ def promedio_precio_consola(consola):
                 contador +=1
         if contador !=0:
             promedio = precio_juegos/contador
-            print(f"EL precio promedio de los juegos de la consola X360 es", promedio.__round__(2))
-            return True
+       
+            return [True,promedio]
         else:
             return False
+
+
+
 
 def filtrar_juegos_por_anio(anios):
     with open('juegos.csv',mode="r",newline='') as archivo:
@@ -80,8 +82,11 @@ def filtrar_juegos_por_anio(anios):
         if contadorWii >0:
             cadena_a_guardar += (f"La consola  nintendo wii tuvo {contadorWii} juegos \n")
 
-        with open(f"juegos_{anios}","w") as arch:
-            arch.write(cadena_a_guardar)
+        if len(cadena_a_guardar) > 0:
+
+            return [True,anios,cadena_a_guardar]
+        else:
+            return False
         
      
     
@@ -95,7 +100,9 @@ while var_menu:
         filtrado = input("Ingrese una palabra clave para filtrar por nombre")
         try:
             res = filtrar_archivo(filtrado)
-            if res :
+            if res[0] :
+                with open("filtro_por_nombre.txt","w") as archivo_a_guardar:
+                    archivo_a_guardar.write(res[1])
                 print("Archivo creado exitosamente!!")
             else:
                 print("No se han encontrado juegos con ese nombre: ")
@@ -107,11 +114,18 @@ while var_menu:
         consola  = input("Ingrese el nombre de una consola para obtener el promedio: ")
         res = promedio_precio_consola(consola)
 
-        if res:
-            print("wiii")
+        if res[0]:
+            print(f"EL precio promedio de los juegos de la consola X360 es", res[1].__round__(2))            
         else:
-            print("boo")
+            print("Error al ejecutar la funcion")
 
     elif opcion =="3":
         anio = input("Ingrese año para buscar juegos: ")
         res = filtrar_juegos_por_anio(anio)
+        if res[0]:
+            with open(f"juegos_{res[1]}","w") as arch:
+                arch.write(res[2])
+            print("Archivo creado exitosamente!!")
+        else:
+            print("Ha ocurrido un problema")
+
